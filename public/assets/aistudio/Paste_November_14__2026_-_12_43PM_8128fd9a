@@ -1,0 +1,1598 @@
+what is the hsitiest UI ever done and worst expirence I dont know what the other agent build it is all went to crap please remove each and eveyrhting which is slop and clean out eveyrhting and fix the dashbaord colour fort this hackahotn here is the promopt i ran for it # AGENTBRIDGE — MASTER PRODUCT RESEARCH, ARCHITECTURE & IMPLEMENTATION SPECIFICATION
+
+## ROLE
+
+Act as a principal software architect, senior full-stack engineer, senior frontend engineer, product designer, distributed-systems engineer, AI infrastructure engineer and technical product manager.
+
+You are responsible for researching, designing and implementing **AgentBridge**, a complete, working, enterprise-grade prototype for the Paytm hackathon.
+
+Do not treat this as a simple dashboard-building exercise.
+
+You must build an integrated product consisting of:
+
+1. A multi-agent business workflow demonstration.
+2. A durable workflow orchestration layer.
+3. An independent business outcome verification engine.
+4. An execution validation and policy layer.
+5. An agent observability and audit system.
+6. A premium enterprise Control Tower dashboard.
+7. A recovery, retry and human escalation mechanism.
+
+You must research existing open-source implementations before deciding what to build, reuse, adapt or discard.
+
+Do not immediately begin coding. First inspect the available project, research the dependencies, make architecture decisions and produce an implementation plan.
+
+---
+
+# PART 1 — PRODUCT DEFINITION
+
+## 1.1 Product identity
+
+Product: AgentBridge
+
+Category: Business Outcome Assurance Layer for Autonomous AI Agents.
+
+Primary positioning:
+
+"Agents do the work. AgentBridge verifies the result."
+
+Alternative tagline:
+
+"Don't trust the status. Verify the outcome."
+
+AgentBridge is designed to sit alongside existing agent ecosystems and workflow engines. It is not intended to replace Paytm Pi, Temporal, AWS Step Functions or existing agent frameworks.
+
+Its purpose is to provide a reusable business-level assurance layer across multi-agent workflows.
+
+## 1.2 Core problem
+
+In a multi-agent business journey, different agents can perform individual tasks across different systems.
+
+A successful response from an agent does not necessarily establish that the intended business operation actually succeeded.
+
+Examples:
+
+- An agent reports that KYC is approved, while the authoritative KYC system still reports Pending.
+- An API operation succeeds but its response times out.
+- A workflow retries an operation that already succeeded.
+- A downstream agent proceeds before an upstream business condition is satisfied.
+- Different systems expose inconsistent or delayed statuses.
+- An operational team cannot easily reconstruct why a journey was blocked.
+
+These are engineering failure scenarios that the prototype must demonstrate. Do not claim they are documented Paytm incidents.
+
+## 1.3 Core product capabilities
+
+Implement the following capabilities:
+
+A. Journey orchestration
+- Start a business journey.
+- Maintain journey-level state.
+- Coordinate multiple agents.
+- Maintain dependencies between stages.
+- Resume workflows after interruption.
+
+B. AI response validation
+- Validate structured response schemas.
+- Check required fields.
+- Check response consistency.
+- Support optional LLM-based evaluation.
+- Never allow an LLM to be the authoritative source of financial or operational success.
+
+C. Execution validation
+- Validate tool names.
+- Validate parameters.
+- Validate agent permissions.
+- Validate request identity.
+- Record execution evidence.
+- Detect duplicate operation attempts.
+
+D. Business outcome verification
+- Query an independent authoritative system.
+- Compare expected and actual business state.
+- Record verification evidence.
+- Block downstream stages when conditions are not satisfied.
+- Recheck delayed or pending outcomes.
+- Escalate unresolved cases.
+
+E. Recovery
+- Safe retries.
+- Exponential backoff.
+- Idempotency.
+- State reconciliation.
+- Human approval.
+- Workflow resumption.
+
+F. Observability
+- Agent execution traces.
+- Workflow timeline.
+- Validation history.
+- Tool execution history.
+- Error and retry history.
+- Latency measurements.
+- Audit records.
+
+G. Control Tower
+- Live operational overview.
+- Journey explorer.
+- Agent monitoring.
+- Validation centre.
+- Human approval queue.
+- Analytics.
+- Audit explorer.
+
+---
+
+# PART 2 — RESEARCH BEFORE CODING
+
+## 2.1 Research the existing GitHub projects
+
+Create a separate directory:
+
+`research/open-source/`
+
+Inspect the following repositories:
+
+1. https://github.com/minw0607/multi_agent_otel_eval
+2. https://github.com/hugo-vicente11/TraceBloom
+3. https://github.com/yair-cohen0/temporal-app
+4. https://github.com/agentkitai/agentlens
+5. https://github.com/JiwaniZakir/lattice
+6. https://github.com/traccia-ai/traccia-py
+7. https://github.com/agentevals-dev/agentevals
+
+Clone the four primary references into the research directory first:
+
+- multi_agent_otel_eval
+- TraceBloom
+- temporal-app
+- AgentLens
+
+The other three are supplementary references. Inspect their documentation and clone only if a specific implementation detail needs deeper examination.
+
+Use shallow clones initially:
+
+`git clone --depth 1 REPOSITORY_URL`
+
+Do not clone all seven into the application directory.
+
+## 2.2 Repository investigation requirements
+
+For each repository, inspect:
+
+- README.md
+- LICENSE
+- package.json or requirements.txt / pyproject.toml
+- Project directory structure
+- Architecture documentation
+- Core source code
+- API definitions
+- Database models
+- Testing strategy
+- Deployment configuration
+- Recent commits
+- Open issues and known limitations
+
+Produce:
+
+`research/REPOSITORY_AUDIT.md`
+
+For each repository, document:
+
+| Field | Required information |
+|---|---|
+| Repository | Owner and name |
+| Purpose | What it actually implements |
+| Language | Primary languages |
+| Architecture | Main components |
+| Reusable logic | Exact modules worth adapting |
+| Overlap | What AgentBridge already intends to build |
+| Missing capabilities | What it does not demonstrate |
+| Dependencies | Important packages and services |
+| Licence | Verified licence and reuse implications |
+| Maintenance | Recent activity and known issues |
+| Decision | Reuse, adapt, reference only or reject |
+
+Do not assume that a README claim is proof of production readiness.
+
+Do not copy a repository's complete architecture just because it has a useful feature.
+
+## 2.3 Repository-specific research instructions
+
+### multi_agent_otel_eval
+
+Study:
+- OpenTelemetry GenAI instrumentation.
+- Parent-child span relationships.
+- Agent execution traces.
+- Hybrid rule-based and LLM-based evaluation.
+- Outcome evaluation.
+- Tool correctness.
+- Safety validation.
+- Evaluation reporting.
+
+Potential adaptation:
+Use its instrumentation and evaluation concepts in AgentBridge.
+
+Do not import its research notebooks, benchmark datasets or complete Python execution environment into the production application.
+
+### TraceBloom
+
+Study:
+- Next.js dashboard architecture.
+- Live agent trace viewer.
+- Waterfall execution timeline.
+- Tool execution and retries.
+- Evaluation result display.
+- Event streaming.
+- Dashboard information architecture.
+
+Potential adaptation:
+Use the ideas behind its trace presentation to design AgentBridge's Journey Explorer and Execution Timeline.
+
+Do not import its complete Rust collector, ClickHouse deployment, dashboard or unrelated evaluation platform.
+
+### temporal-app
+
+Study:
+- Temporal workflow definitions.
+- Worker separation.
+- Workflow signals.
+- Long-running processes.
+- Human approval.
+- Outbox pattern.
+- Idempotent workflow starts.
+- Workflow history.
+
+Potential adaptation:
+Use the workflow and outbox design patterns.
+
+Do not adopt its MongoDB persistence automatically. AgentBridge should use PostgreSQL for its application records.
+
+### AgentLens
+
+Study:
+- Append-only audit records.
+- SHA-256 hash chaining.
+- Event integrity verification.
+- Audit evidence export.
+- Event querying.
+- Agent action history.
+
+Potential adaptation:
+Implement an append-only audit event system and optional hash-chain verification.
+
+Do not copy its full server or frontend.
+
+### Lattice
+
+Study:
+- DAG execution.
+- Capability constraints.
+- Formal verification.
+- Checkpointing.
+- Retry behaviour.
+- Agent routing.
+
+Do not introduce its PyTorch and Z3 architecture unless a concrete use case justifies the complexity.
+
+### Traccia and agentevals
+
+Study:
+- Runtime policy enforcement.
+- Agent evaluation.
+- OpenTelemetry integration.
+- Recorded trace evaluation.
+- Quality regression testing.
+
+Do not build duplicate evaluation pipelines or deploy multiple competing observability systems.
+
+## 2.4 Required research deliverables
+
+Before coding, create:
+
+- `research/REPOSITORY_AUDIT.md`
+- `research/ARCHITECTURE_DECISIONS.md`
+- `research/DEPENDENCY_MATRIX.md`
+- `research/REUSE_VS_BUILD.md`
+- `research/SECURITY_REVIEW.md`
+
+Every adopted dependency must have a clear purpose.
+
+---
+
+# PART 3 — REPOSITORY AND PROJECT STRUCTURE
+
+Use a clean TypeScript monorepo.
+
+Preferred package manager: pnpm.
+
+Proposed structure:
+
+```text
+agentbridge/
+│
+├── apps/
+│   ├── web/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── features/
+│   │   ├── hooks/
+│   │   ├── lib/
+│   │   └── styles/
+│   │
+│   ├── api/
+│   │   ├── routes/
+│   │   ├── middleware/
+│   │   ├── services/
+│   │   ├── integrations/
+│   │   └── server.ts
+│   │
+│   └── worker/
+│       ├── workflows/
+│       ├── activities/
+│       ├── workers/
+│       └── worker.ts
+│
+├── packages/
+│   ├── shared/
+│   │   ├── types/
+│   │   ├── schemas/
+│   │   └── constants/
+│   │
+│   ├── validation/
+│   │   ├── response/
+│   │   ├── execution/
+│   │   ├── outcome/
+│   │   └── policies/
+│   │
+│   ├── agents/
+│   │   ├── sales/
+│   │   ├── kyc/
+│   │   └── operations/
+│   │
+│   └── observability/
+│       ├── tracing/
+│       ├── metrics/
+│       └── audit/
+│
+├── database/
+│   ├── schema/
+│   ├── migrations/
+│   └── seeds/
+│
+├── research/
+│   ├── open-source/
+│   ├── REPOSITORY_AUDIT.md
+│   ├── ARCHITECTURE_DECISIONS.md
+│   ├── DEPENDENCY_MATRIX.md
+│   └── REUSE_VS_BUILD.md
+│
+├── infrastructure/
+│   ├── docker/
+│   └── observability/
+│
+├── tests/
+│   ├── integration/
+│   ├── e2e/
+│   ├── workflows/
+│   └── fixtures/
+│
+├── docker-compose.yml
+├── pnpm-workspace.yaml
+├── package.json
+├── README.md
+└── .env.example
+```
+
+You may modify the structure if there is a strong engineering reason. Document the reason.
+
+Keep frontend, API, worker and shared business logic separated.
+
+Do not place all business logic in Next.js route handlers.
+
+---
+
+# PART 4 — COMPLETE TECHNOLOGY STACK
+
+## 4.1 Frontend
+
+Use:
+
+- Next.js App Router.
+- React.
+- TypeScript with strict mode.
+- Tailwind CSS.
+- shadcn/ui.
+- Lucide React icons.
+- React Flow for journey visualisation.
+
+Use server components by default.
+
+Use client components only where interaction, browser state or streaming requires them.
+
+## 4.2 Component foundation
+
+Use shadcn/ui as the primary component foundation.
+
+Use its accessible components for:
+
+- Buttons.
+- Inputs.
+- Selects.
+- Dropdowns.
+- Dialogs.
+- Cards.
+- Tables.
+- Forms.
+- Tooltips.
+- Tabs.
+- Popovers.
+- Badges.
+- Navigation.
+- Alerts.
+- Skeletons.
+
+Choose one primitive ecosystem for new components:
+
+Prefer Base UI for a new shadcn installation if supported by the selected component. Radix UI is also acceptable.
+
+Do not mix Base UI and Radix arbitrarily.
+
+If an existing repository already has a stable Radix implementation, do not migrate it merely for stylistic consistency.
+
+## 4.3 Specialist UI components
+
+Use the following only where appropriate:
+
+| Library | Purpose |
+|---|---|
+| Sonner | Toast notifications |
+| Vaul | Mobile drawers and bottom sheets |
+| cmdk | Global command menu |
+| NumberFlow | Animated KPI numbers |
+| React Flow | Interactive agent journey graph |
+| Recharts | Analytics charts |
+| TanStack Query | Server-state fetching and caching |
+| Zustand | Small shared client-state stores, only if needed |
+| Zod | Runtime schema validation |
+
+Do not install competing libraries for the same job.
+
+## 4.4 Visual component libraries
+
+Explore:
+
+- Magic UI: https://magicui.design/
+- Aceternity UI: https://ui.aceternity.com/
+- 21st.dev: https://21st.dev/
+- Beautiful UI: https://beautiful-ui.dev/
+- RareUI: https://rareui.com/
+
+Use them selectively.
+
+Rules:
+
+1. Inspect a component before importing it.
+2. Check its dependencies.
+3. Check its licence and reuse terms.
+4. Ensure it works with the current React and Tailwind versions.
+5. Adapt it to AgentBridge tokens.
+6. Do not introduce a new animation library for a single small effect.
+7. Avoid mixing unrelated design languages.
+8. Prefer shadcn components when they already solve the problem.
+
+One major visual interaction per page is the maximum.
+
+The dashboard must remain an enterprise operations tool, not a marketing landing page.
+
+---
+
+# PART 5 — AGENTBRIDGE DESIGN SYSTEM
+
+## 5.1 Visual identity
+
+Product aesthetic:
+
+Premium enterprise fintech control room.
+
+Design references:
+- Modern enterprise observability platforms.
+- Financial operations dashboards.
+- Developer infrastructure consoles.
+- High-quality SaaS admin interfaces.
+
+Do not copy Paytm's consumer application design.
+
+## 5.2 Colour palette
+
+Use the following design tokens.
+
+Dark foundation:
+
+```css
+--background: #101827;
+--surface: #162235;
+--surface-elevated: #1B293B;
+--surface-hover: #22334A;
+--border: #2B3A50;
+
+--foreground: #F4F7FC;
+--muted: #9AAAC0;
+--subtle: #6F8199;
+```
+
+Brand colours:
+
+```css
+--primary: #13B8A6;
+--primary-foreground: #071A24;
+--accent: #54C8E8;
+--accent-secondary: #7C83F6;
+```
+
+Status colours:
+
+```css
+--success: #2DD4A4;
+--warning: #F5B84B;
+--danger: #F16C70;
+--info: #54C8E8;
+```
+
+Light theme:
+
+```css
+--light-background: #F5F7FA;
+--light-surface: #FFFFFF;
+--light-surface-secondary: #EEF2F7;
+--light-border: #DCE3EC;
+--light-foreground: #152338;
+--light-muted: #63748A;
+```
+
+Implement both themes using semantic CSS variables.
+
+Default to dark mode.
+
+Use status colours consistently throughout the application.
+
+Never rely on colour alone to communicate status. Include text labels and icons.
+
+## 5.3 Typography
+
+Use Inter or Geist Sans.
+
+Typography hierarchy:
+
+- Page heading: 24–30px.
+- Section heading: 17–20px.
+- Card heading: 14–16px.
+- Body: 13–14px.
+- Metadata: 11–12px.
+- IDs, trace IDs and timestamps: monospace.
+
+## 5.4 Layout rules
+
+- Sidebar width: approximately 248px.
+- Header height: approximately 64px.
+- Content maximum width: 1600px.
+- Standard card radius: 12px.
+- Standard input radius: 8px.
+- Use an 8px spacing scale.
+- Use subtle borders rather than excessive shadows.
+- Keep dashboard density high enough for professional operations use.
+- Ensure all screens work on desktop, tablet and mobile.
+
+---
+
+# PART 6 — COMPLETE FRONTEND PRODUCT
+
+Implement the following routes.
+
+## 6.1 Application shell
+
+Route: `/`
+
+Create a premium enterprise dashboard shell.
+
+Left navigation:
+
+- Overview.
+- Journeys.
+- Agents.
+- Validation Centre.
+- Approvals.
+- Analytics.
+- Audit Logs.
+- Integrations.
+- Settings.
+
+Header:
+
+- Current workspace.
+- Environment selector.
+- Global search.
+- Notifications.
+- System health.
+- User menu.
+
+Include:
+
+- Responsive sidebar.
+- Collapsed navigation.
+- Mobile navigation drawer.
+- Keyboard navigation.
+- Global command menu using cmdk.
+
+## 6.2 Overview / Control Tower
+
+Route: `/overview`
+
+This is the most important landing page.
+
+Display:
+
+KPI cards:
+- Active journeys.
+- Verified journeys.
+- Blocked journeys.
+- Pending verification.
+- Failed journeys.
+- Human escalations.
+
+Use NumberFlow for numerical changes where it improves clarity.
+
+Add:
+
+1. Journey health overview.
+2. Recent failures.
+3. Latest verification mismatches.
+4. Agent activity.
+5. Workflow completion trend.
+6. System component health.
+7. Recent audit events.
+
+Every metric must be calculated from real application records.
+
+Do not hardcode dashboard values as if they are live.
+
+If displaying demo data, clearly label the environment as SIMULATED.
+
+## 6.3 Journey Explorer
+
+Route: `/journeys`
+
+Build a searchable journey table.
+
+Columns:
+- Journey ID.
+- Merchant reference.
+- Journey type.
+- Current stage.
+- Overall status.
+- Verification status.
+- Started at.
+- Last updated.
+- Duration.
+
+Filters:
+- Status.
+- Journey type.
+- Agent.
+- Date.
+- Verification result.
+
+Clicking a journey opens:
+
+`/journeys/[journeyId]`
+
+### Journey detail screen
+
+Include:
+
+A. Journey summary.
+
+B. Interactive workflow graph using React Flow.
+
+Example:
+
+Sales Agent
+↓
+KYC Agent
+↓
+Risk Agent
+↓
+Operations Agent
+↓
+Merchant Activation
+
+Each node should show:
+- Agent name.
+- Stage status.
+- Start time.
+- Completion time.
+- Validation status.
+- Retry count.
+
+C. Execution timeline.
+
+D. Agent execution details.
+
+E. Validation results.
+
+F. Evidence panel.
+
+G. Recovery history.
+
+H. Audit history.
+
+I. Available actions.
+
+Clicking a node must open a detailed inspector panel.
+
+## 6.4 Agent Registry
+
+Route: `/agents`
+
+Show:
+
+- Agent name.
+- Agent ID.
+- Agent type.
+- Version.
+- Capabilities.
+- Permissions.
+- Health.
+- Last active time.
+- Current executions.
+
+Create an agent detail page.
+
+Show agent configuration, capabilities, execution history, failure rate and permissions.
+
+For the prototype, use three simulated agents:
+
+- Sales Agent.
+- KYC Agent.
+- Operations Agent.
+
+Risk can be represented as a stage or fourth simulated agent if time permits.
+
+## 6.5 Validation Centre
+
+Route: `/validation`
+
+This is the core differentiating interface.
+
+Three primary sections:
+
+### AI Response Validation
+
+Checks:
+- Response schema.
+- Required fields.
+- Expected response format.
+- Consistency.
+- Optional quality evaluation.
+
+### Execution Validation
+
+Checks:
+- Tool identity.
+- Parameters.
+- Permissions.
+- Request ID.
+- Idempotency key.
+- Execution result.
+
+### Business Outcome Validation
+
+Checks:
+- Expected state.
+- Actual state.
+- Source system.
+- Evidence timestamp.
+- Verification result.
+- Whether the next stage can proceed.
+
+Display a detailed verification comparison.
+
+Example:
+
+```text
+Agent claim: KYC_APPROVED
+Source state: KYC_PENDING
+
+Result: MISMATCH
+Action: BLOCKED
+Reason: Authoritative status does not satisfy approval requirement.
+```
+
+Do not allow a natural-language response to override an authoritative system status.
+
+## 6.6 Human Approval Centre
+
+Route: `/approvals`
+
+Display:
+
+- Approval ID.
+- Journey.
+- Reason.
+- Risk level.
+- Requested action.
+- Assigned reviewer.
+- Created time.
+- Deadline.
+
+Provide:
+- Approve.
+- Reject.
+- Request additional evidence.
+- Escalate.
+
+Require a reason for sensitive decisions.
+
+The prototype can simulate permissions, but the backend must still validate the action.
+
+## 6.7 Analytics
+
+Route: `/analytics`
+
+Metrics:
+
+- Journey completion rate.
+- Verified outcome rate.
+- False-completion detection count.
+- Duplicate operation attempts.
+- Recovery success rate.
+- Average verification latency.
+- Average journey duration.
+- Human escalation rate.
+- Agent-level failure rate.
+
+All calculations must be traceable to database records.
+
+Do not fabricate percentage improvements or claim measured Paytm ROI.
+
+## 6.8 Audit Logs
+
+Route: `/audit`
+
+Display:
+
+- Event ID.
+- Journey ID.
+- Actor.
+- Event type.
+- Timestamp.
+- Previous state.
+- New state.
+- Evidence reference.
+- Integrity status.
+
+Include search, filtering, pagination and export.
+
+Support hash-chain integrity verification if implemented.
+
+## 6.9 Integrations
+
+Route: `/integrations`
+
+Display integration adapters for:
+
+- Merchant system.
+- KYC system.
+- Risk system.
+- Operations system.
+- Agent endpoints.
+- OpenTelemetry collector.
+
+For the prototype, use simulated endpoints.
+
+Show:
+- Connection status.
+- Last health check.
+- API version.
+- Permissions.
+- Available capabilities.
+
+Never display actual credentials.
+
+## 6.10 Settings
+
+Route: `/settings`
+
+Sections:
+- Workspace.
+- Users and roles.
+- Agent permissions.
+- Validation policies.
+- Workflow policies.
+- Notification settings.
+- Environment configuration.
+
+Do not expose secrets in the browser.
+
+---
+
+# PART 7 — BACKEND ARCHITECTURE
+
+## 7.1 API
+
+Use Node.js and TypeScript.
+
+Preferred framework: Fastify.
+
+Use:
+- Zod for validation.
+- Structured logging.
+- Central error handling.
+- Request IDs.
+- Authentication middleware.
+- Role and permission checks.
+
+The API should expose versioned routes under `/api/v1`.
+
+## 7.2 Workflow engine
+
+Use Temporal with its TypeScript SDK.
+
+Run the worker on Node.js.
+
+Do not place network calls or non-deterministic operations directly inside workflow code.
+
+External side effects belong in Activities.
+
+Implement:
+- Workflow start.
+- Workflow status.
+- Workflow signals.
+- Workflow queries.
+- Retry policies.
+- Timeouts.
+- Workflow cancellation.
+- Recovery.
+- Human approval signals.
+
+Use stable workflow IDs.
+
+## 7.3 Database
+
+Use PostgreSQL.
+
+Preferred TypeScript ORM: Drizzle ORM, with explicit SQL migrations.
+
+Required tables:
+
+### journeys
+
+- id
+- external_reference
+- journey_type
+- status
+- current_stage
+- environment
+- started_at
+- completed_at
+- created_at
+- updated_at
+
+### journey_stages
+
+- id
+- journey_id
+- stage_name
+- agent_id
+- status
+- expected_state
+- actual_state
+- started_at
+- completed_at
+
+### agents
+
+- id
+- name
+- type
+- version
+- endpoint
+- capabilities
+- permissions
+- status
+- created_at
+
+### agent_runs
+
+- id
+- journey_id
+- stage_id
+- agent_id
+- request_id
+- input_reference
+- output_reference
+- reported_status
+- execution_status
+- started_at
+- completed_at
+
+### validation_checks
+
+- id
+- journey_id
+- stage_id
+- validation_type
+- expected_value
+- actual_value
+- result
+- reason
+- checked_at
+
+### evidence_records
+
+- id
+- journey_id
+- validation_id
+- source_system
+- evidence_type
+- reference_id
+- payload_hash
+- captured_at
+
+### idempotency_keys
+
+- key
+- operation_type
+- journey_id
+- status
+- response_reference
+- created_at
+
+### audit_events
+
+- id
+- journey_id
+- actor_type
+- actor_id
+- event_type
+- previous_state
+- new_state
+- metadata
+- previous_hash
+- event_hash
+- created_at
+
+### approval_requests
+
+- id
+- journey_id
+- stage_id
+- reason
+- status
+- requested_by
+- reviewed_by
+- decision_reason
+- created_at
+- resolved_at
+
+Add foreign keys, indexes, constraints and appropriate retention policies.
+
+Do not store unnecessary sensitive merchant data.
+
+Store references and redacted evidence wherever possible.
+
+## 7.4 Event architecture
+
+Use a consistent event envelope.
+
+Example:
+
+```json
+{
+  "eventId": "evt_001",
+  "journeyId": "journey_001",
+  "eventType": "OUTCOME_VERIFICATION_FAILED",
+  "source": "agentbridge.validation",
+  "timestamp": "ISO-8601",
+  "correlationId": "corr_001",
+  "payload": {}
+}
+```
+
+Required events:
+
+- JOURNEY_CREATED
+- AGENT_STARTED
+- AGENT_COMPLETED
+- AGENT_FAILED
+- EXECUTION_VALIDATED
+- RESPONSE_VALIDATED
+- OUTCOME_VERIFICATION_STARTED
+- OUTCOME_VERIFICATION_PASSED
+- OUTCOME_VERIFICATION_FAILED
+- WORKFLOW_BLOCKED
+- RETRY_SCHEDULED
+- RETRY_EXECUTED
+- APPROVAL_REQUESTED
+- APPROVAL_GRANTED
+- APPROVAL_REJECTED
+- JOURNEY_VERIFIED
+- JOURNEY_FAILED
+
+Use Server-Sent Events for live dashboard updates initially.
+
+Do not add NATS or Redis unless a demonstrated requirement justifies them.
+
+---
+
+# PART 8 — VALIDATION ENGINE
+
+Create a deterministic validation package independent of the UI.
+
+## 8.1 Validation levels
+
+Level 1: AI response validation.
+
+Validate structure, required data, expected output and configurable response-quality rules.
+
+Level 2: Execution validation.
+
+Validate that the intended tool/API was called with authorised inputs and a traceable operation identity.
+
+Level 3: Business outcome validation.
+
+Query the authoritative business system and check whether the required state actually exists.
+
+## 8.2 Verification contract
+
+Create a common verification interface.
+
+Example:
+
+```ts
+interface OutcomeVerifier {
+  verify(input: {
+    journeyId: string;
+    merchantReference: string;
+    expectedState: string;
+    operationId: string;
+  }): Promise<{
+    verified: boolean;
+    actualState: string;
+    sourceSystem: string;
+    evidenceReference: string;
+    checkedAt: string;
+    reason?: string;
+  }>;
+}
+```
+
+Each integration adapter must implement this contract.
+
+## 8.3 Rules
+
+- Agent-reported success is not verified success.
+- Missing evidence means unverified.
+- A timeout must not automatically mean failure.
+- A timeout must not automatically trigger a duplicate side effect.
+- Query the source of truth before repeating uncertain operations.
+- Use idempotency keys.
+- Apply bounded retries and exponential backoff.
+- Respect source-system consistency delays.
+- Escalate unresolved operations.
+- Record all verification decisions.
+
+## 8.4 State machine
+
+Implement:
+
+```text
+NOT_STARTED
+    ↓
+RUNNING
+    ↓
+REPORTED_SUCCESS
+    ↓
+VERIFYING
+    ├── VERIFIED
+    │      ↓
+    │   NEXT_STAGE
+    │
+    ├── MISMATCH
+    │      ↓
+    │   BLOCKED
+    │      ↓
+    │   RECHECK / RECOVERY
+    │
+    ├── SOURCE_UNAVAILABLE
+    │      ↓
+    │   VERIFICATION_PENDING
+    │
+    └── NON_RECOVERABLE
+           ↓
+         NEEDS_HUMAN
+```
+
+Other terminal states:
+
+- FAILED
+- CANCELLED
+- COMPLETED
+
+A journey can only be marked VERIFIED when every required business gate has passed.
+
+---
+
+# PART 9 — MOCK PAYTM JOURNEY
+
+Build a realistic but fully simulated merchant onboarding workflow.
+
+Do not use real Paytm APIs or customer information.
+
+## 9.1 Agents
+
+### Sales Agent
+
+Responsibilities:
+- Create merchant profile.
+- Assign merchant reference.
+- Submit onboarding details.
+- Return structured completion response.
+
+### KYC Agent
+
+Responsibilities:
+- Submit KYC request.
+- Receive simulated KYC response.
+- Return structured verification status.
+
+### Operations Agent
+
+Responsibilities:
+- Check required prerequisites.
+- Request activation.
+- Return activation status.
+
+## 9.2 Mock systems
+
+Create independent mock services:
+
+- Merchant API.
+- KYC API.
+- Risk API (optional).
+- Activation API.
+
+The mock KYC API must maintain its own authoritative state, separate from the agent's reported result.
+
+## 9.3 Main demonstration
+
+Scenario:
+
+1. Sales creates merchant.
+2. KYC agent submits KYC.
+3. KYC agent reports APPROVED.
+4. Authoritative KYC API returns PENDING.
+5. AgentBridge detects mismatch.
+6. Operations is blocked.
+7. Dashboard displays evidence.
+8. Mock KYC system transitions to APPROVED.
+9. AgentBridge rechecks.
+10. Verification passes.
+11. Operations agent resumes.
+12. Activation succeeds.
+13. Journey is marked VERIFIED.
+
+This must happen through actual API calls and workflow execution, not through frontend-only status changes.
+
+## 9.4 Additional failure scenarios
+
+Implement test cases for:
+
+- Normal successful journey.
+- False completion.
+- API timeout after successful operation.
+- Duplicate operation request.
+- Source system unavailable.
+- Delayed consistency.
+- Human approval required.
+
+---
+
+# PART 10 — SECURITY AND GOVERNANCE
+
+Implement security principles even in the prototype.
+
+Requirements:
+
+- Least-privilege permissions.
+- Server-side secrets.
+- Environment variable validation.
+- No hardcoded API keys.
+- Input validation.
+- Output redaction.
+- Request authentication.
+- Role-based authorisation.
+- Audit history.
+- Rate limits.
+- Secure error messages.
+- Restricted demo actions.
+- Synthetic merchant data.
+
+Do not claim production-grade Paytm security or compliance.
+
+Document what is implemented and what would be required before production deployment.
+
+---
+
+# PART 11 — OBSERVABILITY
+
+Use OpenTelemetry for distributed tracing.
+
+Capture:
+
+- Journey ID.
+- Agent ID.
+- Stage ID.
+- Correlation ID.
+- Workflow ID.
+- Tool name.
+- Execution result.
+- Validation outcome.
+- Duration.
+- Retry count.
+
+Connect frontend journey details to backend traces using correlation identifiers.
+
+Use structured JSON logs.
+
+Track:
+
+- Workflow latency.
+- Agent execution latency.
+- Verification latency.
+- Retry count.
+- Failure count.
+- Verification success rate.
+
+Do not log raw KYC documents, secrets or sensitive payloads.
+
+For the initial prototype, a local OpenTelemetry Collector and an appropriate trace viewer are sufficient.
+
+Do not deploy multiple competing observability products.
+
+---
+
+# PART 12 — TESTING REQUIREMENTS
+
+Use Vitest for unit and integration tests.
+
+Use Playwright for frontend end-to-end tests.
+
+Required unit tests:
+
+- Response schema validation.
+- Execution permission validation.
+- Outcome state comparison.
+- Idempotency behaviour.
+- Retry policy.
+- Event generation.
+- Audit hash verification.
+
+Required workflow tests:
+
+1. Successful journey.
+2. False success blocked.
+3. Timeout after successful API execution.
+4. Duplicate operation prevented.
+5. Delayed verification.
+6. Source-system outage.
+7. Human approval.
+8. Workflow resumption.
+
+Required frontend tests:
+
+- Dashboard renders.
+- Journey filters work.
+- Journey detail opens.
+- Validation evidence appears.
+- Blocked status is displayed.
+- Recovery updates the timeline.
+- Mobile navigation works.
+- Keyboard interactions work.
+
+The demonstration must not depend on a manually edited database record.
+
+---
+
+# PART 13 — IMPLEMENTATION ORDER
+
+Do not build all features simultaneously.
+
+Work in these phases.
+
+## Phase 0: Repository research
+
+Inspect the repositories, document decisions and identify reusable patterns.
+
+Deliverable:
+Complete research audit and architecture decision record.
+
+## Phase 1: Foundation
+
+- Create monorepo.
+- Configure Next.js.
+- Configure Tailwind.
+- Install shadcn/ui.
+- Establish design tokens.
+- Set up Fastify.
+- Set up PostgreSQL.
+- Configure Temporal.
+- Configure Docker Compose.
+
+Deliverable:
+A running application with connected infrastructure.
+
+## Phase 2: Core backend
+
+- Define shared types.
+- Define database schema.
+- Implement journey API.
+- Implement agent registry.
+- Implement mock APIs.
+- Implement validation package.
+
+Deliverable:
+A working backend that can create and track a merchant journey.
+
+## Phase 3: Workflow engine
+
+- Create Temporal workflow.
+- Add agent activities.
+- Add outcome verification.
+- Add idempotency.
+- Add retries.
+- Add recovery.
+- Add human escalation.
+
+Deliverable:
+The false-completion scenario works end-to-end.
+
+## Phase 4: Dashboard
+
+Build in this order:
+
+1. Application shell.
+2. Overview.
+3. Journey Explorer.
+4. Journey Detail.
+5. Validation Centre.
+6. Agent Registry.
+7. Audit Logs.
+8. Approvals.
+9. Analytics.
+10. Settings.
+
+Deliverable:
+All important screens connected to backend data.
+
+## Phase 5: Live updates
+
+- Implement SSE.
+- Stream workflow events.
+- Update journey status.
+- Update validation panels.
+- Update notifications.
+
+Deliverable:
+The dashboard visibly updates during execution.
+
+## Phase 6: Testing and polish
+
+- Run all automated tests.
+- Fix integration issues.
+- Check responsive behaviour.
+- Check accessibility.
+- Check loading and error states.
+- Record demo backup.
+
+Deliverable:
+A reliable hackathon prototype.
+
+---
+
+# PART 14 — DEFINITION OF DONE
+
+The project is not finished simply because the dashboard looks good.
+
+It is finished when:
+
+1. A user can create a journey.
+2. Three agents can execute their respective tasks.
+3. The agents communicate through the backend.
+4. Temporal manages the workflow.
+5. An agent can report success incorrectly.
+6. AgentBridge independently queries the source system.
+7. The validation engine detects the mismatch.
+8. The workflow blocks downstream execution.
+9. Idempotency prevents duplicate side effects.
+10. Recovery occurs through the actual workflow.
+11. The dashboard displays evidence and execution history.
+12. The workflow resumes after verification.
+13. The final journey is marked VERIFIED.
+14. Every important action has an audit record.
+15. All core scenarios pass automated tests.
+
+---
+
+# PART 15 — FINAL REQUIRED DELIVERABLES
+
+Produce:
+
+1. Complete working source code.
+2. Architecture diagram.
+3. Database schema and migrations.
+4. API documentation.
+5. Agent interface contracts.
+6. Validation engine documentation.
+7. Workflow state machine documentation.
+8. Repository audit.
+9. Dependency and licensing audit.
+10. Docker Compose configuration.
+11. `.env.example`.
+12. Automated test suite.
+13. Frontend design system.
+14. Screenshots of the completed dashboard.
+15. Local setup instructions.
+16. Demo script.
+17. Technical presentation notes.
+18. Known limitations and production-readiness gaps.
+
+Also create:
+
+`README.md`
+
+It must contain exact commands to install, configure, run, seed and test the application.
+
+---
+
+# PART 16 — STRICT ENGINEERING RULES
+
+1. Research before implementation.
+2. Never blindly merge entire GitHub repositories.
+3. Do not copy code without checking its licence.
+4. Do not add dependencies without a reason.
+5. Do not build a decorative dashboard with fake operational data.
+6. Do not make UI-only simulations of backend operations.
+7. Do not trust agent success messages as business evidence.
+8. Do not put external API side effects inside Temporal workflow code.
+9. Do not expose credentials or sensitive data.
+10. Do not claim real Paytm integration.
+11. Do not claim that Paytm lacks capabilities that have not been verified.
+12. Do not claim production readiness for an untested prototype.
+13. Keep the application modular and maintainable.
+14. Keep the UI visually consistent.
+15. Run tests after each major implementation phase.
+16. Keep DRY practices in the code and follow test driven development
+
+If you discover that an existing dependency already implements a capability, evaluate whether to integrate it instead of rebuilding it.
+
+If you discover an architectural conflict, stop and explain the trade-off before making a major change.
+
+---
+
+# FINAL INSTRUCTION
+
+Begin by inspecting the current working directory and identifying existing project files.
+
+Then conduct the open-source repository audit.
+
+Next, produce the architecture and dependency decisions.
+
+Only after those decisions are documented should you begin implementing the application.
+
+Do not stop after generating a plan or a dashboard mockup. Continue until the core workflow, verification engine, database, backend, dashboard and tests work together.
+
+Your ultimate goal:
+
+**Build a convincing, technically credible AgentBridge prototype that a Paytm engineer can inspect, a hackathon judge can challenge, and a developer can run locally without relying on undocumented steps.**

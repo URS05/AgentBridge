@@ -1,0 +1,6 @@
+{
+  "name": "AgentBridge",
+  "description": "Business Outcome Assurance Layer & Enterprise Control Tower for Multi-Agent Workflows",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
