@@ -1,4 +1,4 @@
-# AgentBridge — Business Outcome Assurance Control Tower
+# AgentBridge - Business Outcome Assurance Control Tower
 
 > **Agents do the work. AgentBridge verifies the result.**  
 > *Don't trust the status. Verify the outcome.*
